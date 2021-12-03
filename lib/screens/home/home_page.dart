@@ -7,10 +7,10 @@ import 'package:flutter/material.dart';
 import 'package:food_delivery_app/UI/list_widget.dart';
 import 'package:food_delivery_app/components/importing_packages.dart';
 import 'package:food_delivery_app/main.dart';
+import 'package:food_delivery_app/model/food_json.dart';
 import 'package:food_delivery_app/screens/home/draver/drawer_page.dart';
 import 'package:food_delivery_app/screens/home/search_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
 
 class HomePage extends StatefulWidget {
   @override
@@ -87,45 +87,45 @@ class _HomePageState extends State<HomePage> {
       ),
     );
   }
-  Widget _topBar(){
+
+  Widget _topBar() {
     return Row(
-                  children: [
-                    InkWell(
-                      onTap: () {
-                        _key.currentState!.openDrawer();
-                        setState(() {});
-                      },
-                      child: Container(
-                        height: getHeight(31),
-                        width: getWidth(31),
-                        decoration:
-                            BoxDecoration(color: Colors.white, boxShadow: [
-                          BoxShadow(
-                            color: Colors.grey,
-                            blurRadius: .3,
-                            spreadRadius: .4,
-                          )
-                        ]),
-                        child: IconName.menu,
-                      ),
-                    ),
-                    SizedBox(width: getWidth(13)),
-                    Text(
-                      "Current Location",
-                      style: TextStyle(
-                        fontSize: getFont(18),
-                      ),
-                    ),
-                    SizedBox(
-                      width: getWidth(8),
-                    ),
-                    SizedBox(
-                      height: getHeight(8),
-                      width: getWidth(16),
-                      child: IconName.down,
-                    ),
-                  ],
-                );
+      children: [
+        InkWell(
+          onTap: () {
+            _key.currentState!.openDrawer();
+            setState(() {});
+          },
+          child: Container(
+            height: getHeight(31),
+            width: getWidth(31),
+            decoration: BoxDecoration(color: Colors.white, boxShadow: [
+              BoxShadow(
+                color: Colors.grey,
+                blurRadius: .3,
+                spreadRadius: .4,
+              )
+            ]),
+            child: IconName.menu,
+          ),
+        ),
+        SizedBox(width: getWidth(13)),
+        Text(
+          "Current Location",
+          style: TextStyle(
+            fontSize: getFont(18),
+          ),
+        ),
+        SizedBox(
+          width: getWidth(8),
+        ),
+        SizedBox(
+          height: getHeight(8),
+          width: getWidth(16),
+          child: IconName.down,
+        ),
+      ],
+    );
   }
 
   Widget _textFormField() {
@@ -138,12 +138,12 @@ class _HomePageState extends State<HomePage> {
         fillColor: ConstColors.greyColor,
         prefixIcon: Icon(CupertinoIcons.search),
         enabledBorder: OutlineInputBorder(
-            borderSide: BorderSide(width: .65, color: Colors.grey),
-            ),
-            
+          borderSide: BorderSide(width: .65, color: Colors.grey),
+        ),
       ),
-      onFieldSubmitted: (s){
-        Navigator.push(context, MaterialPageRoute(builder: (context)=>SearchPage()));
+      onFieldSubmitted: (s) {
+        Navigator.push(
+            context, MaterialPageRoute(builder: (context) => SearchPage()));
       },
     );
   }
@@ -257,4 +257,5 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
- }
+  
+}

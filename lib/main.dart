@@ -29,12 +29,12 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
-    print(isSignedIn);
     return MaterialApp(
       theme: ThemeData(fontFamily: 'Poppins'),
       debugShowCheckedModeBanner: false,
       title: 'Food  Delivery',
-      home: isSignedIn == false ? SplashScreen() : FoodBottomNarBar(),
+      home: FoodBottomNarBar(),
+      // home: SplashScreen();
     );
   }
 }

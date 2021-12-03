@@ -1,5 +1,9 @@
 //Ibrohim
 
+import 'dart:convert';
+
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:food_delivery_app/model/food_json.dart';
 import 'package:food_delivery_app/screens/home/search_page.dart';
 import '../../components/importing_packages.dart';
 
@@ -11,9 +15,11 @@ class FavoritesPage extends StatefulWidget {
 }
 
 class _FavoritesPageState extends State<FavoritesPage> {
+  FirebaseFirestore _firestore = FirebaseFirestore.instance;
   @override
   Widget build(BuildContext context) {
     SizeConfig.init(context);
+
     return Scaffold(
       appBar: _appBar(),
       body: SafeArea(
@@ -67,8 +73,8 @@ class _FavoritesPageState extends State<FavoritesPage> {
                 ),
                 child: InkWell(
                   onTap: () {
-                    Navigator.push(
-                        context, MaterialPageRoute(builder: (_) => const CartPage()));
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (_) => const CartPage()));
                   },
                   child: Container(
                     child: const Text('Open My Cart>'),
@@ -235,66 +241,18 @@ class _FavoritesPageState extends State<FavoritesPage> {
   }
 
   _itemsWidget() {
-    return ListView.builder(
-        itemCount: 20,
-        itemBuilder: (context, index) {
-          return Padding(
-            padding:
-                const EdgeInsets.only(top: 5, bottom: 5, right: 5, left: 5),
-            child: ListTile(
-                leading: Container(
-                  height: getHeight(76.0),
-                  width: getWidth(70.0),
-                  decoration: const BoxDecoration(
-                    image: DecorationImage(
-                      image:
-                          NetworkImage('https://source.unsplash.com/random/23'),
-                      fit: BoxFit.cover,
-                    ),
-                  ),
-                ),
-                title: Text(
-                  'Pepperoni Pizza',
-                  style: TextStyle(
-                      color: ConstColors.mainColor, fontSize: getFont(23)),
-                ),
-                subtitle: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      "Pizzeria Restaurant",
-                      style: TextStyle(
-                        fontSize: getFont(16),
-                      ),
-                    ),
-                    Text(
-                      'Chinese & Italian | \$\$',
-                      style: TextStyle(
-                          fontSize: getFont(6),
-                          color: ConstColors.textColorBlack),
-                    ),
-                    Row(
-                      children: [
-                        const Icon(
-                          Icons.star,
-                          size: 14,
-                          color: ConstColors.mainColor,
-                        ),
-                        Text(
-                          '(Based on 130 reviews)',
-                          style: TextStyle(
-                            fontSize: getFont(14),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-                trailing: const Icon(
-                  Icons.favorite,
-                  color: Colors.redAccent,
-                )),
-          );
+    return StreamBuilder(
+        stream: _firestore.collection("json").snapshots(),
+        builder: (context, AsyncSnapshot<QuerySnapshot> snap) {
+          if (snap.hasData) {
+            QuerySnapshot<Object?>? data = snap.data;
+            getInfo(data);
+            return Text("snap has data");
+          } else {
+            return Center(
+              child: CircularProgressIndicator(),
+            );
+          }
         });
   }
 
@@ -378,5 +336,22 @@ class _FavoritesPageState extends State<FavoritesPage> {
         onPressed: () {},
       ),
     );
+  }
+
+  Future<dynamic> getInfo(QuerySnapshot<Object?>? data) async {
+    List<DocumentSnapshot> templist;
+    List<Map<dynamic, dynamic>> maps;
+    List list = [];
+// CollectionReference collectionRef = Firestore.instance.collection("path");
+// QuerySnapshot collectionSnapshot = await collectionRef.getDocuments();
+
+    templist = data!.docs; // <--- ERROR
+
+    list = templist.map((DocumentSnapshot docSnapshot) {
+      return docSnapshot.data;
+    }).toList();
+    // ignore: unused_local_variable
+    var mal = json.decode(list[1]);
+    print(mal.toString());
   }
 }
